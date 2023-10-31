@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variable Grid Field</title>
+	<script src="inputVis.js"></script>
+	<script src="color.js"></script>
+    <style>
+        .grid {
+            display: grid;
+            gap: 2px;
+        }
+        .cell {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="grid" id="grid">
+    <!-- Cells will be generated dynamically -->
+</div>
+
+<script>
+    const boardSize = numberData[numberData.length - 1].number + 1;  // Change this value to set a different board size
+
+    const grid = document.getElementById('grid');
+    grid.style.gridTemplateColumns = `repeat(${boardSize}, 50px)`;
+    grid.style.gridTemplateRows = `repeat(${boardSize}, 50px)`;
+    for (let i = 0; i < boardSize * boardSize; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.id = 'cell-' + i;
+        grid.appendChild(cell);
+    }
+
+    function setNumberToCell(x, y, number) {
+        const cellId = boardSize * y + x;
+        const cell = document.getElementById('cell-' + cellId);
+        cell.textContent = number;
+    }
+
+    function setBackgroundColorToCell(x, y, color) {
+        const cellId = boardSize * y + x;
+        const cell = document.getElementById('cell-' + cellId);
+        cell.style.backgroundColor = color + '66';
+    }
+
+    function setBoldAndLargeTextToCell(x, y) {
+        const cellId = boardSize * y + x;
+        const cell = document.getElementById('cell-' + cellId);
+        cell.style.fontWeight = 'bold';
+        cell.style.fontSize = 'larger'; // これを追加して、文字の大きさを大きくします。
+    }
+
+    function resetTextSizeAndWeight(x, y) {
+        const cellId = boardSize * y + x;
+        const cell = document.getElementById('cell-' + cellId);
+        cell.style.fontWeight = 'normal';
+        cell.style.fontSize = 'small'; // デフォルトのサイズにリセットします。必要に応じて調整可能。
+    }
+
+
+
+    function clearBoard() {
+        for (let x = 0; x < boardSize; x++) {
+            for (let y = 0; y < boardSize; y++) {
+                setBackgroundColorToCell(x, y, "#FFFFFF");
+                resetTextSizeAndWeight(x, y); 
+            }
+        }
+    }
+
+	window.onload = function(){
+		setNumbers();
+	}
+
+    let currentSetIndex = 0;
+
+    function applyActionSet(index) {
+        clearBoard();
+        actionSets[index]();
+        boldGroups[index]();
+    }
+	
+	const actionSets = actionData.map((actions, index) => {
+		const color = colors[index] || '#FFFFFF';  // 色が足りない場合のデフォルト値
+		return function() {
+			for (let action of actions) {
+				setBackgroundColorToCell(action.x, action.y, color);
+			}
+		};
+	});
+
+    const boldGroups = groupData.map((numbers, index) => {
+        return function() {
+            for (let number of numbers) {
+                const coords = numberData.find(data => data.number === number);
+                if (coords) {
+                    setBoldAndLargeTextToCell(coords.x, coords.y);
+                }
+            }
+        };
+    });
+
+    function setNumbers() {
+        for (const data of numberData) {
+            setNumberToCell(data.x, data.y, data.number);
+        }
+    }
+
+    document.body.addEventListener('keydown', function(event) {
+        switch(event.key) {
+            case 'ArrowLeft':
+                if (currentSetIndex > 0) {
+                    currentSetIndex--;
+                }
+                break;
+            case 'ArrowRight':
+                if (currentSetIndex < actionSets.length - 1) {
+                    currentSetIndex++;
+                }
+                break;
+            default:
+                return;
+        }
+        applyActionSet(currentSetIndex);
+    });
+
+    applyActionSet(currentSetIndex);  // 初期状態のセットを適用
+</script>
+
+</body>
+</html>
