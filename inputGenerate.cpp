@@ -104,7 +104,7 @@ int main(void){
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	timer.reset();
-	double TIMELIMIT = 2.0;
+	double TIMELIMIT = 10.0;
 	random_device rnd;     // 非決定的な乱数生成器
 	unsigned long long sd = (unsigned long long)rnd(); 
 	Random.set_seed(sd);
@@ -114,21 +114,12 @@ int main(void){
     int cmp = 0;
     set<int> used;
     while(cmp < T){
-        ll bit = Random.randint(1, pow(2, N));
-        if(used.count(bit) > 0) continue;
-        function<ll(ll)> counter = [&](ll x){
-            if(x == 0LL) return 0LL;
-            return counter(x >> 1) + (x & 1);
-        };
-        if(counter(bit) <= 1) continue;
-
-        // adopt
-        FOR(i,0,N){
-            if((bit >> i) & 1){
-                ans[cmp].push_back(i);
-            }
+        int cnt = Random.randint(2, N);
+        auto perm = Random.randperm(N, cnt);
+        sort(range(perm));
+        FOR(i,0,cnt){
+            ans[cmp].push_back(perm[i]);
         }
-        used.insert(bit);
         cmp++;
     }
 

@@ -121,9 +121,20 @@ int main(void){
         }
     }
 	ans.resize(N);
+    int miX = N, miY = N;
 	FOR(i,0,N){
 		cin >> ans[i].first >> ans[i].second;
+        miX = min(miX, ans[i].first);
+        miY = min(miY, ans[i].second);
 	}
+
+    int mxX = -1, mxY = -1;
+    FOR(i,0,N){
+        ans[i].first -= miX;
+        ans[i].second -= miY;
+        mxX = max(mxX, ans[i].first);
+        mxY = max(mxY, ans[i].second);
+    }
 
 	// number output
 	cout << "const numberData = [";
@@ -163,6 +174,9 @@ int main(void){
 
 	cout << "const numSizeData = " << N << ";" << endl;
 	cout << endl;
+    cout << "const boardSizeX = " << mxX + 1 << ";" << endl;
+    cout << "const boardSizeY = " << mxY + 1 << ";" << endl;
+    cout << endl;
 	cout << "const groupSizeData = " << T << ";" << endl;
 	cout << endl;
 

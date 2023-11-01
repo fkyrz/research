@@ -28,12 +28,10 @@
 </div>
 
 <script>
-    const boardSize = numberData[numberData.length - 1].number + 1;  // Change this value to set a different board size
-
     const grid = document.getElementById('grid');
-    grid.style.gridTemplateColumns = `repeat(${boardSize}, 50px)`;
-    grid.style.gridTemplateRows = `repeat(${boardSize}, 50px)`;
-    for (let i = 0; i < boardSize * boardSize; i++) {
+    grid.style.gridTemplateColumns = `repeat(${boardSizeX}, 50px)`;
+    grid.style.gridTemplateRows = `repeat(${boardSizeY}, 50px)`;
+    for (let i = 0; i < boardSizeX * boardSizeY; i++) {
         const cell = document.createElement('div');
         cell.className = 'cell';
         cell.id = 'cell-' + i;
@@ -41,26 +39,26 @@
     }
 
     function setNumberToCell(x, y, number) {
-        const cellId = boardSize * y + x;
+        const cellId = boardSizeX * y + x;
         const cell = document.getElementById('cell-' + cellId);
         cell.textContent = number;
     }
 
     function setBackgroundColorToCell(x, y, color) {
-        const cellId = boardSize * y + x;
+        const cellId = boardSizeX * y + x;
         const cell = document.getElementById('cell-' + cellId);
         cell.style.backgroundColor = color + '66';
     }
 
     function setBoldAndLargeTextToCell(x, y) {
-        const cellId = boardSize * y + x;
+        const cellId = boardSizeX * y + x;
         const cell = document.getElementById('cell-' + cellId);
         cell.style.fontWeight = 'bold';
         cell.style.fontSize = 'larger'; // これを追加して、文字の大きさを大きくします。
     }
 
     function resetTextSizeAndWeight(x, y) {
-        const cellId = boardSize * y + x;
+        const cellId = boardSizeX * y + x;
         const cell = document.getElementById('cell-' + cellId);
         cell.style.fontWeight = 'normal';
         cell.style.fontSize = 'small'; // デフォルトのサイズにリセットします。必要に応じて調整可能。
@@ -69,8 +67,8 @@
 
 
     function clearBoard() {
-        for (let x = 0; x < boardSize; x++) {
-            for (let y = 0; y < boardSize; y++) {
+        for (let x = 0; x < boardSizeX; x++) {
+            for (let y = 0; y < boardSizeY; y++) {
                 setBackgroundColorToCell(x, y, "#FFFFFF");
                 resetTextSizeAndWeight(x, y); 
             }
