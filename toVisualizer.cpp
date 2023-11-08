@@ -128,6 +128,15 @@ int main(void){
         miY = min(miY, ans[i].second);
 	}
 
+    vector<pair<P, P>> vertex(T);
+    FOR(t,0,T){
+        cin >> vertex[t].first.first >> vertex[t].first.second >> vertex[t].second.first >> vertex[t].second.second;
+        vertex[t].first.first -= miX;
+        vertex[t].first.second -= miY;
+        vertex[t].second.first -= miX;
+        vertex[t].second.second -= miY;
+    }
+
     int mxX = -1, mxY = -1;
     FOR(i,0,N){
         ans[i].first -= miX;
@@ -149,20 +158,11 @@ int main(void){
 	// background output
 	cout << "const actionData = [";
 	FOR(t,0,T){
-		int minX = N, maxX = -1, minY = N, maxY = -1;
-		for (auto i: group[t]){
-			auto x = ans[i].first;
-			auto y = ans[i].second;
-			minX = min(minX, x);
-			maxX = max(maxX, x);
-			minY = min(minY, y);
-			maxY = max(maxY, y);
-		}
 		cout << "[";
-		FOR(x,minX,maxX+1){
-			FOR(y,minY,maxY+1){
+		FOR(x,vertex[t].first.first,vertex[t].second.first+1){
+			FOR(y,vertex[t].first.second,vertex[t].second.second+1){
 				cout << "{x:" << x << ", y:" << y << "}";
-				if(x < maxX || y < maxY) cout << ", ";
+				if(x < vertex[t].second.first || y < vertex[t].second.second) cout << ", ";
 			}
 		}
 		if(t < T - 1) cout << "], ";

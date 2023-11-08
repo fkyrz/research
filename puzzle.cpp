@@ -247,6 +247,17 @@ int main(void){
     for(auto [x, y]: ansGame.ans){
         cout << x << " " << y << endl;
     }
+    FOR(t,0,T){
+		int minX = N, maxX = -1, minY = N, maxY = -1;
+		for (auto i: group[t]){
+			auto [x, y] = ansGame.ans[i];
+			minX = min(minX, x);
+			maxX = max(maxX, x);
+			minY = min(minY, y);
+			maxY = max(maxY, y);
+		}
+        cout << minX << " " << minY << " " << maxX << " " << maxY << endl;
+	}
 
     return 0;
 }
